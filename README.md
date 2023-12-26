@@ -2,6 +2,7 @@
 ## Cloud Native Security - 4C's Framework
 ### Overview:
 This repository introduces the 4C's framework, a foundational approach to ensuring robust security in cloud-native environments. The 4C's represent key pillars that collectively contribute to a comprehensive security strategy.
+![1_CSdBkjcdLPHKrtP86oCtZw](https://github.com/YoussefBayouli/Kubernetes-Security-Specialist-Handbook/assets/75679079/5ecaea05-0cc6-45ab-bdb7-55c7e1155eb0)
 
 ## The 4C's:
 
@@ -34,6 +35,5 @@ Note: Adapt and integrate these security practices into your development lifecyc
 
 Feel free to customize this template based on your specific repository structure and audience.
 
-![1_CSdBkjcdLPHKrtP86oCtZw](https://github.com/YoussefBayouli/Kubernetes-Security-Specialist-Handbook/assets/75679079/5ecaea05-0cc6-45ab-bdb7-55c7e1155eb0)
 
 
