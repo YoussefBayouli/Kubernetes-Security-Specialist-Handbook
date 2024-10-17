@@ -11,81 +11,81 @@ This repository introduces the 4C's framework, a foundational approach to ensuri
 Encompasses the secure utilization of cloud infrastructure and services.
 Security Focus: Ensuring secure access, data integrity, encryption, and proper configuration of cloud resources.
 
-### Clusters:
-### Definition: 
+# Clusters:
+## Definition: 
 Involves the secure orchestration and management of containerized applications using platforms like Kubernetes.
 Security Focus: Securing cluster infrastructure, controlling resource access, and ensuring workload integrity and isolation.
-# Authentication: 
-1. RBAC (Role-Based Access Control)
+## Authentication: 
+#### 1. RBAC (Role-Based Access Control)
 Use RBAC to manage access: Ensure you leverage Kubernetes RBAC to control access to resources based on user roles. Grant the least privilege necessary for users and services to operate.
 Limit cluster-admin access: Avoid granting the cluster-admin role unless absolutely necessary. Regular users should have minimal permissions.
 Regularly review and audit RBAC roles: Ensure roles and role bindings are regularly audited to detect over-provisioning of access.
-2. API Authentication
+#### 2. API Authentication
 Use strong authentication methods: Enable secure methods like OpenID Connect (OIDC) for API server authentication, integrating with external identity providers.
 Use service accounts for applications: Ensure that every application has its own service account, rather than using the default account, to ensure proper isolation and traceability.
 Disable anonymous access: Disable anonymous API access to prevent unauthorized requests to the Kubernetes API.
-3. Network Policies
+#### 3. Network Policies
 Implement Network Policies: Ensure that network traffic is controlled between namespaces and pods. Define which services can communicate, limiting lateral movement within the cluster in case of compromise.
 Default deny policy: Start with a "deny-all" network policy and then whitelist allowed traffic.
-4. Secret Management
+#### 4. Secret Management
 Use Kubernetes Secrets securely: Store sensitive data like passwords and tokens in Kubernetes Secrets, and mount them as environment variables or files, rather than hardcoding them in images or configurations.
 Encrypt secrets at rest: Enable encryption of Secrets at rest using Kubernetes EncryptionConfig to protect stored Secrets from unauthorized access.
 Rotate secrets regularly: Implement policies to rotate Secrets frequently to minimize exposure in case of a compromise.
-5. Authentication Integration
+#### 5. Authentication Integration
 Use external identity providers: Configure Kubernetes to use an external authentication system like LDAP, OAuth, or SAML to authenticate users through established identity systems, reducing the risk of managing credentials directly in the cluster.
 Multi-factor authentication (MFA): Integrate MFA for added security when accessing the Kubernetes API, especially for sensitive roles and administrative accounts.
-6. Certificate Management
+#### 6. Certificate Management
 Use client certificates: For service-to-service authentication and communication, ensure you use mutual TLS (mTLS) with client certificates.
 Automate certificate management: Use tools like Cert-Manager to automatically issue and renew TLS certificates, reducing the risk of expired certificates causing outages.
-7. Pod Security
+#### 7. Pod Security
 Use Pod Security Standards: Adopt Kubernetes Pod Security Standards (Baseline, Restricted) to ensure your pods are following best security practices, particularly in terms of user permissions and the use of non-root containers.
-8. Audit Logging
+#### 8. Audit Logging
 Enable API audit logs: Ensure that API server audit logs are enabled to track authentication and authorization events. This can help detect suspicious activities or policy violations.
 Log and monitor access attempts: Implement systems to log and monitor user access attempts and regularly review these logs for potential threats.
 
-# Authorization: 
-1. Use RBAC (Role-Based Access Control) Effectively
+## Authorization: 
+#### 1. Use RBAC (Role-Based Access Control) Effectively
 Principle of Least Privilege: Always grant the minimum set of permissions required for users and services. For example, avoid giving cluster-admin privileges to regular users.
 Role and RoleBinding: Use Role and RoleBinding for namespace-specific access control. For example, bind users or services to specific roles within a namespace rather than cluster-wide roles when they don’t need full access.
 ClusterRole and ClusterRoleBinding: Use ClusterRole and ClusterRoleBinding sparingly for permissions that need to apply across the entire cluster. Ensure only admins or critical system components use them.
-2. Restrict Access to Kubernetes API
+#### 2. Restrict Access to Kubernetes API
 Disable Unauthorized API Access: Use RBAC to restrict access to the Kubernetes API. Disable anonymous access, and ensure only authenticated and authorized users can perform actions.
 Control Sensitive Operations: Limit access to sensitive Kubernetes API operations such as creating or deleting pods, modifying secrets, or changing cluster configurations. Only trusted roles should be allowed to perform these actions.
 Use Admission Controllers: Implement and configure Admission Controllers like PodSecurityPolicy, NodeRestriction, and others to enforce security policies and control what users or pods can do at runtime.
-3. Impose Resource Quotas and Limits
+#### 3. Impose Resource Quotas and Limits
 Enforce Resource Quotas: Use ResourceQuota objects to enforce limits on resource consumption within namespaces. This prevents over-allocation of resources and ensures users or teams cannot exhaust cluster resources.
 Limit Ranges: Use LimitRange objects to define limits on the amount of resources (CPU, memory) that containers can use within a namespace. This helps prevent any single application or user from monopolizing resources.
-4. Network Policy for Service Authorization
+#### 4. Network Policy for Service Authorization
 Network Policies for Access Control: Use NetworkPolicy objects to restrict traffic between pods and services. Define which services are allowed to communicate with each other at the pod level, based on namespaces, labels, and ports.
 Isolate Sensitive Workloads: Isolate critical or sensitive workloads from less trusted components using strict network policies, ensuring that only authorized traffic is allowed.
-5. Pod Security Policies (PSP) / Pod Security Admission
+#### 5. Pod Security Policies (PSP) / Pod Security Admission
 Pod Security Admission: Apply Pod Security Standards (Baseline, Restricted) to ensure that pods adhere to security best practices like running as non-root, dropping unnecessary capabilities, and limiting privileged operations.
 Pod-level Access Control: Use security contexts to define what a pod or container can do, restricting access to the node’s resources. For example, disallowing host network access, setting readOnlyRootFilesystem, and not allowing privileged containers.
-6. Service Account Authorization
+#### 6. Service Account Authorization
 Use Separate Service Accounts: Each workload (pod or application) should have its own dedicated service account with only the permissions it needs to operate. This avoids using the default service account, which may have more privileges than necessary.
 Service Account RoleBindings: Create custom RoleBindings for each service account to enforce strict authorization boundaries for individual services.
 Service Account Tokens: Use short-lived service account tokens to limit the risk of token abuse if compromised.
-7. Limit Access to Sensitive Resources
+#### 7. Limit Access to Sensitive Resources
 Restrict Access to Secrets: Use RBAC to strictly control who or what can access Kubernetes Secrets. Only authorized users, processes, or service accounts should have access to these sensitive resources.
 Separate Sensitive Data: Isolate sensitive data like credentials, keys, or other security-critical information into dedicated namespaces and limit access using roles.
-8. Audit and Review Authorization Policies
+#### 8. Audit and Review Authorization Policies
 Regular Policy Audits: Continuously audit RBAC policies, network policies, and access control configurations to ensure they remain effective and up to date. Use Kubernetes audit logs to track changes to RBAC configurations.
 Monitor Role Usage: Regularly monitor and analyze the usage of roles to ensure they are not over-privileged or being misused. Consider tools that can help with this analysis by showing unused or redundant roles.
-9. Webhook Authorization
+#### 9. Webhook Authorization
 Use Webhook Authorization for External Controls: If you have external authorization systems, integrate them using the Webhook authorization mechanism. This allows you to centralize authorization decisions outside Kubernetes and apply external security policies.
 External Authorization Checks: Use the Webhook API to extend Kubernetes authorization with external checks based on company policy or compliance requirements.
-10. Limit Self-Access Modifications
+#### 10. Limit Self-Access Modifications
 Prevent Privilege Escalation: Ensure that users and service accounts cannot escalate their privileges (e.g., avoid granting access to RBAC resources that could allow a user to give themselves more permissions). Configure Admission Controllers to enforce policies that prevent this.
 Use Impersonation Safeguards: If using impersonation, ensure that only trusted users or services can impersonate others, to prevent unauthorized access.
-11. Avoid Wildcard Permissions
+#### 11. Avoid Wildcard Permissions
 Avoid using * in RBAC rules: Avoid granting broad permissions using wildcards like *, as this can unintentionally grant more access than intended. Instead, explicitly define what resources and verbs are allowed.
-12. Enforce Namespace Boundaries
-Namespace Segregation: Separate different workloads or teams into different namespaces and enforce RBAC policies at the namespace level. This ensures that users or services cannot access resources in other namespaces unless explicitly authorized.
-13. Use SelfSubjectAccessReview for Authorization Debugging
+#### 12. Enforce Namespace Boundaries Namespace Segregation: 
+Separate different workloads or teams into different namespaces and enforce RBAC policies at the namespace level. This ensures that users or services cannot access resources in other namespaces unless explicitly authorized.
+#### 13. Use SelfSubjectAccessReview for Authorization Debugging
 Check Access with SelfSubjectAccessReview: Use Kubernetes’ SelfSubjectAccessReview API to verify what actions a user or service account is allowed to perform. This is useful for debugging and testing authorization policies.
 
 # Admission Control: 
-1. Enable Necessary Admission Controllers
+#### 1. Enable Necessary Admission Controllers
 Use recommended admission controllers: Kubernetes has a variety of built-in admission controllers, and some should always be enabled for security purposes. Common security-related admission controllers include:
 PodSecurity (formerly PodSecurityPolicy): Enforces pod security standards based on predefined profiles (privileged, baseline, restricted).
 NamespaceLifecycle: Prevents modifications to system-critical namespaces (like kube-system) and allows control over the lifecycle of other namespaces.
